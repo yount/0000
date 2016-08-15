@@ -1,0 +1,65 @@
+/home/perficient/Downloads/liferay-ce-portal-7.0-ga2/tomcat-8.0.32/bin
+sh startup.sh
+tail -f ../logs/catalina.out
+sh shutdown.sh
+
+Desktop/projects/liferay-ce-portal-7.0-ga2/tomcat-8.0.32/bin
+
+
+
+	at org.apache.coyote.http11.AbstractHttp11JsseProtocol.init(AbstractHttp11JsseProtocol.java:120)
+	at org.apache.catalina.connector.Connector.initInternal(Connector.java:960)
+	... 13 more
+
+
+/opt/liferay-portal-6.2-ce-ga4/tomcat-7.0.42/webapps/ROOT/WEB-INF/classes
+
+
+
+/opt/liferay-portal-6.2-ce-ga4/portal-bd-MYSQL.properties
+
+
+
+docker run --name lep-mysql  -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=lportal -e MYSQL_PASSWORD=lportal -e MYSQL_DATABASE=lportal -d gaumire/mysql5.5
+
+
+docker run  -it -p 8888:8080 --link lep-mysql:db_lep -e DB_TYPE=MYSQL snasello/liferay-6.2:6.2-ce-ga4
+
+docker run -it -v /home/perficient/liferay:/opt/liferay-portal-6.2-ce-ga4/tomcat-7.0.42/webapps/ROOT/WEB-INF/classes --name liferay -p 8888:8080 -d snasello/liferay-6.2:6.2-ce-ga4
+
+
+docker run  -it -v /home/perficient/LiferaySource:/opt/LiferaySource -p 8888:8080 --link lep-mysql:db_lep -e DB_TYPE=MYSQL snasello/liferay-6.2:6.2-ce-ga4
+
+
+
+docker run  -it -v /root/home/LiferayPortal:/var/liferay-home/deploy -v /root/home/LiferaySource:/opt/LiferaySource -p 8888:8080 --link mysqlServer:db_lep -e DB_TYPE=MYSQL dh1006/liferay6.2
+
+
+
+file:/opt/liferay-portal-6.2-ce-ga4/tomcat-7.0.42/temp/6-sync-web/WEB-INF/classes/service.properties
+
+
+
+
+
+
+docker inspect -f '{{.Id}}' 75af7ded9082
+
+sudo cp /home/perficient/liferay_theme/portal_normal.vm /var/lib/docker/aufs/mnt/75af7ded9082b5c70529e5d79db1b0747e3b535a3499bd96fac4de0e42ea8675/root/portal_normal.vm
+
+
+/opt/liferay-portal-6.2-ce-ga4/tomcat-7.0.42/webapps/ROOT/html/themes/classic/templates
+
+
+
+
+
+
+
+
+docker run  -it -v /root/home/LiferayPortal:/var/liferay-home/deploy -v /root/home/LiferaySource:/opt/LiferaySource -v /root/home/LiferaySource/portal-ext.properties:/opt/liferay-portal-6.2-ce-ga4/tomcat-7.0.42/webapps/ROOT/WEB-INF/classes/portal-ext.properties -p 8888:8080 --link mysqlServer:db_lep -e DB_TYPE=MYSQL dh1006/liferay6.2
+
+
+
+
+

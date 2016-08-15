@@ -1,0 +1,112 @@
+ 	
+ 	.detailtable {  
+		align:center;
+		text-align: right;
+		
+ 	}
+ 	.detailtable .tdt{ 
+ 	background:#97cbff;
+ 	color:white;
+ 	font-style:italic;
+ 	font-weight:bold;
+ 	/* font-family:Times; */
+ 	}
+ 	.detailtable .tdp{ 
+ 	padding-top: 10px;
+		padding-bottom: 10px; }
+ 	.detailtable td{  
+		align:center;
+		text-align: left; 
+		/* border-top:1px dashed #c2c2c2; */
+ 	}
+ 	
+ 	.table {  
+		align:center;
+	    table-layout: fixed;  
+	    width: 100%; 
+	  	border:0px;
+	    margin: 0px;  
+	    padding:0px;
+	   /*  border:solid 1px #118ade; */
+	}  
+	  
+	.table td,.table td a{ 
+		align:center;
+		border:0px;
+	    margin: 0px;
+	    padding:0px;
+	    /* text-overflow: ellipsis;  
+	    -moz-text-overflow: ellipsis; 
+	    overflow: hidden;   
+	    white-space: pre-line;  */
+	    word-break:break-all; 
+	    text-align: center;
+	    color:black;
+	    vertical-align:middle;
+	}  
+.mytable{
+	table-layout: fixed;  
+	width: 100%; 
+	border: solid 0px #000;
+	margin: 20px 0px 20px;
+	align:center;
+	
+}
+.mytable .tdl{width: 60%;text-align: left; padding-right:20px;padding-top: 40px;}
+.mytable .tdr{width: 40%;text-align: right; padding-right:60px;padding-top: 40px;font: 24px Arial, Helvetica, sans-serif;}
+
+
+img {
+	width: 90%; height: 90%;
+}
+
+.image{
+	width: 40px; height: 40px;
+}
+
+
+ .button {	
+
+/*  width:auto;
+ height:30px;
+ overflow:visible;
+ border-radius: .5em; */
+ 	width: 30px;
+ 	height: 30px;
+ 	margin: 0px;
+	padding:0px;
+	display: inline-block;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 5px/100% Arial, Helvetica, sans-serif;
+	padding: .25em .25em .25em;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: .5em; 
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2); 
+	color: #fff;
+	border: solid 1px #0076c3;
+	background: #0095cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078c5));
+}
+.button:hover {
+	text-decoration: none;
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+
+}
+.button:active {
+	position: relative;
+	top: 1px;
+	color: #88bed6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078c5), to(#00cdee));
+	
+}
+ 
+ 
+ 
