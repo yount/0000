@@ -1,0 +1,20 @@
+{
+    "button": [
+        {
+            "type": "view", 
+            "name": "Login", 
+            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx69235a4f4bfbb277&redirect_uri=http%3A%2F%2F121.43.175.85%3A8888%2Fguestbook-portlet%2FoauthServlet&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+        }, 
+        {
+            "type": "view", 
+            "name": "Perficient", 
+            "url": "http://121.43.175.85:8888/"
+        }, 
+        {
+            "type": "view", 
+            "name": "Help", 
+            "url": "http://121.43.175.85:8888/widget/web/guest/home/-/SampleDemo_WAR_SampleDemo_INSTANCE_8zhKS8EjvhYs"
+        }
+    ]
+}
+
