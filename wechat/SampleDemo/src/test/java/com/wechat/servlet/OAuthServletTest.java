@@ -81,7 +81,7 @@ public class OAuthServletTest {
 		EasyMock.replay(user);
 		
 		PowerMock.mockStatic(AdvancedUtil.class);
-    	EasyMock.expect(AdvancedUtil.getOauth2AccessToken("wx69235a4f4bfbb277","cef58090596a3e0d272e66044b6ecaf4",code)).andReturn(weixinOauth2Token);
+    	EasyMock.expect(AdvancedUtil.getOauth2AccessToken("wx29e52cd7861daba6","46c484e0faee213f079709cf9bed69d1",code)).andReturn(weixinOauth2Token);
     	PowerMock.replay(AdvancedUtil.class);
 		
     	PowerMock.mockStatic(DataAccess.class);
@@ -143,7 +143,7 @@ public class OAuthServletTest {
 		EasyMock.replay(user);
 		
 		PowerMock.mockStatic(AdvancedUtil.class);
-    	EasyMock.expect(AdvancedUtil.getOauth2AccessToken("wx69235a4f4bfbb277","cef58090596a3e0d272e66044b6ecaf4",code)).andReturn(weixinOauth2Token);
+    	EasyMock.expect(AdvancedUtil.getOauth2AccessToken("wx29e52cd7861daba6","46c484e0faee213f079709cf9bed69d1",code)).andReturn(weixinOauth2Token);
     	EasyMock.expect(AdvancedUtil.getSNSUserInfo(accessToken,openId)).andReturn(null);
     	PowerMock.replay(AdvancedUtil.class);
 		

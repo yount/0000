@@ -12,12 +12,21 @@
 	<portlet:resourceURL id="changeUserInfoStatus" var="changeUserInfoStatusURL">
 </portlet:resourceURL>
 
+<portlet:defineObjects />
+	<portlet:resourceURL id="showImage" var="showImageURL">
+</portlet:resourceURL>
+
 <portlet:actionURL name="dispatchRequest" var="infoDetailURL">
 	<portlet:param name="destination" value="toInfoDetail" />
 </portlet:actionURL>
 
 <portlet:actionURL name="dispatchRequest" var="addInfoURL">
 	<portlet:param name="destination" value="addInfo" />
+</portlet:actionURL>
+
+
+<portlet:actionURL name="dispatchRequest" var="tohomepageURL">
+	<portlet:param name="destination" value="tohomepage" />
 </portlet:actionURL>
 
 <html>
@@ -71,11 +80,11 @@
 <body>
 	
 	
-<%-- 	<%if(isAdministrator){%>
+	<%if(isAdministrator){%>
 		<a href="${addInfoURL }">
 			<input type="button" id="" value="add" style="width:100px;" class="button" />
 		</a>
-	<%} %> --%>
+	<%} %> 
 	
 <%-- 	<%
 		for(int i=0;i<3;i++){
@@ -96,7 +105,7 @@
 				<tr>
 					<td style="width:18%;padding:1px;vertical-align:middle; vertical-align:middle;padding-top:5px;padding-bottom:5px;" >
 						<a href="${infoDetailURL }&infoUUID=${info.info.uuid}">
-							<img alt="Failed to get the picture" src="<%=basePath%>/${info.info.imageURL}" class="image"/>
+							<img alt="Failed to get the picture" src="${showImageURL}&imgFile=${info.info.mainImageURL}" class="image"/>
 						</a>
 					</td>
 					<td  style="width:57%;padding:1px;vertical-align:middle; vertical-align:middle;padding-top:5px;padding-bottom:5px;">
@@ -172,9 +181,12 @@
 	</form>
 <%-- 		<%
 		}%> --%>
+		
 	</c:forEach>
 	
-	
+	<div>
+	 <a href="${tohomepageURL }">back</a>
+	</div>
 	
 	
 	

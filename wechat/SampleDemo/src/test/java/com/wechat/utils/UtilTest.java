@@ -33,12 +33,10 @@ public class UtilTest {
 	@Test
 	public void testGetUrlProperties(){
 		Properties expectProp=new Properties();
-		expectProp.setProperty("ip", "121.43.175.85");
-		expectProp.setProperty("url", "http://121.43.175.85");
+		expectProp.setProperty("url", "http://employee.perficientgdc.com.cn");
 		expectProp.setProperty("port", "8888");
 		Properties prop=Util.getUrlProperties();
-		System.out.println(prop.getProperty("ip")+"&&"+prop.getProperty("url")+"&&"+prop.getProperty("port"));
-		Assert.assertEquals(expectProp.getProperty("ip").toString(), prop.getProperty("ip").toString());
+		System.out.println(prop.getProperty("url")+"&&"+prop.getProperty("port"));
 		Assert.assertEquals(expectProp.getProperty("url").toString(), prop.getProperty("url").toString());
 		Assert.assertEquals(expectProp.getProperty("port").toString(), prop.getProperty("port").toString());
 	}

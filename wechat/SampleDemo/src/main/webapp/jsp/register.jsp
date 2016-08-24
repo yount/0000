@@ -136,12 +136,11 @@
 								<button type="button" class="btn btn-sm btn-info" onclick="submit_form()">
 									<span class="glyphicon glyphicon-off"></span> Activate
 								</button>
-								<button type="button" class="btn btn-sm btn-info" onclick="">
-									<a href="${toLoginURL }">
-										<span class="glyphicon glyphicon-off" id="toLogin"></span> Login
-									</a>
+								<!-- 
+								<button type="button" class="btn btn-sm btn-info" onclick="toLogin()">
+									<span class="glyphicon glyphicon-off" id="toLogin"></span> Login
 								</button>
-								
+								 -->
 							</div>
 						</div>
 					</form>
@@ -179,7 +178,7 @@
 	
 	function submit_form(){
 		if(check()){
-			$.post("${activateURL }",
+			$.post("${activateURL }&",
 				  {
 					empId:$('#empId').val(),
 					password:$('#password').val(),
@@ -189,14 +188,14 @@
 				  function(data,status){
 					  var msg = data.msg;
 					  if(data.result==1){
-						  $.post("http://121.43.175.85:8888/c/portal/login",
+						  $.post("http://employee.perficientgdc.com.cn:8888/c/portal/login?"+new Date(),
 								  {
 									parameterAutoLoginLogin:msg.email,
 									parameterAutoLoginPassword:msg.password
 								  },
 								  function(data,status){
 									  if('success' == status){
-										  window.location.href="${toInfoURL }";
+										  window.location.href="${ToHomePageUrl}";
 									  } else {
 										  alert('emailaddress or password incorrect');
 									  }
@@ -239,16 +238,21 @@
 //		alert('openId='+$('#openId').val());
 		// alert("openId="+$('#openId').val());
 		
-//		if(openId=="" || openId==null){
-//			$('#toLogin').click();
-//			return;
-//		} 
+		if(openId=="" || openId==null){
+			window.location.href="${toLoginURL }";
+			// $('#toLogin').click();
+			return;
+		} 
 		
 /* 		var jump = "${jump }";
 		if(!jump){
 			window.location.href="${toInfoURL }";
 		} */
 			
+	}
+	
+	function toLogin(){
+		window.location.href="${toLoginURL }";
 	}
 	// window.reload();
 </script>

@@ -8,9 +8,9 @@
 		 <instanceable>false</instanceable>  
            <requires-namespaced-parameters>false</requires-namespaced-parameters> 
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/jquery-1.9.1.min.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/js/jquery-1.7.2.min.js</footer-portlet-javascript>
 		 <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		 <footer-portlet-javascript>/js/jquery.cookie.js</footer-portlet-javascript> 
+		 <footer-portlet-javascript>/js/ajaxfileupload.js</footer-portlet-javascript>
 		<css-class-wrapper>test</css-class-wrapper>
 	</portlet>
 	

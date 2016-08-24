@@ -274,6 +274,13 @@ public class FeedPageControllerTest {
 		assertEquals(m.getViewName(),"info/infoDetail");
 		//assertEquals(m.getModelMap().toString(),model.toString());
 	}  
+    @Test
+    public void testaddInfo() throws NestableException{
+    	ModelMap model = new ModelMap();
+    	ModelAndView m=feedpageController.addInfo(request, response);
+    	assertEquals(m.getViewName(),"info/addInfo");
+    }
+    
 
 	
 }

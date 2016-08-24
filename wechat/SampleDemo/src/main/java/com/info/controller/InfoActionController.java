@@ -21,7 +21,6 @@ public class InfoActionController {
 	@ResourceMapping(value="addInfoURL")
 	@ResponseBody
 	public void setDat(ResourceRequest request, ResourceResponse response){
-		System.out.println("9999999999");
 		try {
 			
 //			User user = UserLocalServiceUtil.getUserById(20199);

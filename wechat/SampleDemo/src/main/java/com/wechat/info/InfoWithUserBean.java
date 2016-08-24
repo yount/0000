@@ -6,8 +6,14 @@ public class InfoWithUserBean {
 	private String uuid;
 	private long userId;
 	private String infoId; 
+	public String getInfoId() {
+		return infoId;
+	}
+	public void setInfoId(String infoId) {
+		this.infoId = infoId;
+	}
 	private Date registerTime;
-	private int status=-1;
+	private int status=0; 
 	
 	public InfoWithUserBean(){
 		super();

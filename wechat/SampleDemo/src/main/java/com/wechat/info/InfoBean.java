@@ -9,12 +9,16 @@ public class InfoBean {
 	private Date endDate; // 到期时间
 	private String title; // 消息抬头
 	private String content; // 消息内容
-	private String imageURL; // 图片在本地的路径
+	private String imageURL; // 图片在本地的路径,字段存放多张图片路径,以";"隔开
+	private String mainImageURL;//事件主图在本地路径
+	private String mediaURL; //视频在本地的路径
 	private String status; // 消息状态
 	private String location; // 地点
 	private String audience; // 成员类型
 	private Date startTime; // 开始时间
-	
+	public InfoBean() {
+		super();
+	}
 	
 	public Date getStartTime() {
 		return startTime;
@@ -24,9 +28,7 @@ public class InfoBean {
 		this.startTime = startTime;
 	}
 
-	public InfoBean() {
-		super();
-	}
+	
 	
 	public String getUuid() {
 		return uuid;
@@ -70,6 +72,12 @@ public class InfoBean {
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
+	public String getMediaURL(){
+		return mediaURL;
+	}
+	public void setMediaURL(String mediaURL){
+		this.mediaURL=mediaURL;
+	}
 	public String getStatus() {
 		return status;
 	}
@@ -91,6 +99,14 @@ public class InfoBean {
 
 	public void setAudience(String audience) {
 		this.audience = audience;
+	}
+
+	public String getMainImageURL() {
+		return mainImageURL;
+	}
+
+	public void setMainImageURL(String mainImageURL) {
+		this.mainImageURL = mainImageURL;
 	}
 	
 }

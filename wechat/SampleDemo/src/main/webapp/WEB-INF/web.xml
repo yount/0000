@@ -17,10 +17,17 @@
         <servlet-name>oauthServlet</servlet-name>
         <url-pattern>/oauthServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>oauthServlet</servlet-name>
+        <url-pattern>/oauthServlet/</url-pattern>
+    </servlet-mapping>
     
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+	<listener> 
+        <listener-class>com.wechat.utils.InfoTimerListenerUtil</listener-class>  
+	</listener>
 
 	<servlet>
         <servlet-name>ViewRendererServlet</servlet-name>

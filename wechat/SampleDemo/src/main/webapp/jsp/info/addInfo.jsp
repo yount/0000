@@ -5,6 +5,23 @@
 <portlet:defineObjects />
 	<portlet:resourceURL id="changeUserInfoStatus" var="changeUserInfoStatusURL">
 </portlet:resourceURL>
+
+<portlet:actionURL name="dispatchRequest" var="toInfoURL">
+	<portlet:param name="destination" value="toInfo" />
+</portlet:actionURL>
+
+<portlet:defineObjects />
+	<portlet:resourceURL id="addinfo" var="addinfoURL">
+</portlet:resourceURL>
+
+<portlet:defineObjects />
+	<portlet:resourceURL id="uploadImage" var="uploadImageURL">
+</portlet:resourceURL>
+
+<portlet:defineObjects />
+	<portlet:resourceURL id="delImage" var="delImageURL">
+</portlet:resourceURL>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -15,9 +32,239 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
-<script type="text/javascript" >
 
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/srdz.preview.2.0.css">
+<script type="text/javascript" ></script>
+<script type="text/javascript" src="<%=basePath%>js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/ajaxfileupload.js" > </script>
+
+<script type="text/javascript" src="<%=basePath%>datepicker/js/jquery-ui-datepicker.js"></script> 
+<link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/jquery-ui.css"/> 
+<script >
+$(function(){ 
+	
+    $('#starttime').datepicker(); 
+    
+}); 
 </script>
+
+
+<script >
+function submitinfo(){
+	$.post("${addinfoURL}",
+		  {
+			title:$('#title').val(),
+			location :$('#location').val(),
+			startTime:$('#starttime').val(),
+			endTime:$('#endtime').val(),
+			targetedaudience:$('#targetedaudience').val(),
+			description:$('#description').val(),
+			mainimage:$('#mainimage').val(),
+			image:$('#image').val()
+		  },
+		  function(data,status){
+			  if('success' == status){
+				  window.location.href="${toInfoURL }";
+				 
+			  }else{
+				  alert("fail to add");
+			  }
+		  },"json");
+}
+
+
+
+
+
+<%-- $(function(){
+	// 添加图片
+	$('#img_add').bind('click',function(){
+		var time = new Date().getTime();
+		var fileid = "file" + time;
+		var xdelid = "xdel" + time;
+		var delid = "del" + time;
+		var viewid = "view" + time;
+		var htm = "" +
+		"<div  style='display:inline-block;width:150px;float:left;'>" +
+		  "<div class='dft'>" +
+		    "<a class='btn-pic btn-pic-bg' href='javascript:void(0);' >" +
+		      "<span>上传图片</span>" +
+		      "<input id='" + fileid + "' type='file' name='file' class='ipt-bg' />" +
+		    "</a>" +
+		  "</div>" +
+		  "<div id='" + xdelid + "' class='drt'>" +
+		    "<a class='btn-pic btn-pic-bg' href='javascript:void(0)'>" +
+		      "<span>删除图片</span>" +
+		      "<input type='button' id='" + delid + "' class='ipt-bg'/>" +
+		    "</a>" +
+		  "</div>" +
+		  "<div id='" + viewid + "' ></div>";
+		"</div>" +
+		$("#img_view").append(htm);
+		
+		
+		$("#" + fileid).bind("click",function(){
+		    var $this =$(this);
+		    var browser={
+		      isIE:function(ver){
+		        var b = document.createElement('b');
+		        b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+		        return b.getElementsByTagName('i').length === 1;
+		      }
+		    };
+		    $this.change(function(){
+		      var regex=/(.*)\.(jpg|jpeg|png)$/;
+		      var val = $this.val();
+		      if(!regex.test(val)){
+		        $("#" + viewid).html("<span class='spanc'>请选择正确的图片（jpg、jpeg、png）!</span>");
+		        $("#" + xdelid).show();
+		        return;
+		      }
+		      if(browser.isIE(6)){
+		        HanderOther($this);
+		      }else if(browser.isIE(7) || browser.isIE(8) || browser.isIE(9)){
+		        HanderIE789($this);
+		      }else if(window.FileReader){
+		        HanderFileReader($this);
+		      }else{
+		        $("#" + viewid).html("<span class='spanc'>该浏览器不支持预览图片!</span>");
+		        $("#" + xdelid).show();
+		      }
+		      function HanderFileReader($this){
+		        var oFReader = new window.FileReader(),
+		        rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+		        oFReader.onload = function (oFREvent){
+		          $("#" + viewid).html("<img src='"+oFREvent.target.result+"' style='width:100%;height:100%;'/>");
+		          $("#" + xdelid).show();
+		        };
+		        var aFiles = $this.get(0).files;
+		        if (aFiles.length == 0) { return; }
+		        if (!rFilter.test(aFiles[0].type)) { 
+		          $("#" + viewid).html("<span class='spanc'>请选择正确的图片（jpg、jpeg、png）!</span>"); 
+		          $("#" + xdelid).show();
+		          return; 
+		        }
+		        oFReader.readAsDataURL(aFiles[0]);
+		      }
+		      function HanderIE789($this){
+		        if(options.width != null && parseInt(options.width) > 0){
+		          $("#" + viewid).css("width",options.width + "px");
+		        }else{
+		          $("#" + viewid).css("width","378px");
+		        }
+		        if(options.height != null && parseInt(options.height) > 0){
+		          $("#" + viewid).css("height",options.height + "px");
+		        }else{
+		          $("#" + viewid).css("height","358px");
+		        }
+		        $("#" + viewid).css("filter","progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src='"+GetImgSrc($this)+"')");
+		        $("#" + xdelid).show();
+		      }
+		      function HanderOther($this){
+		        $("#" + viewid).html("<img src='"+$this.val()+"' style='width:100%;height:100%;'/>");
+		        $("#" + xdelid).show();
+		      }
+		      function GetImgSrc($this){
+		        $this.select();
+		        $this.blur();
+		        var imgSrc =document.selection.createRange().text;
+		        document.selection.empty();
+		        return imgSrc;
+		      }
+		    });
+		  });//绑定按钮事件
+		  
+		  $("#" + delid).bind("click",function(){
+		    var browser={
+		        isIE:function(ver){
+		          var b = document.createElement('b');
+		          b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+		          return b.getElementsByTagName('i').length === 1;
+		        }
+		      };
+		    if(browser.isIE(7) || browser.isIE(8) || browser.isIE(9)){
+		      $("#" + fileid).val('');
+		      $("#" + viewid).css("filter","");
+		      $("#" + viewid).css("width","");
+		      $("#" + viewid).css("height","");
+		      $("#" + xdelid).hide();
+		    }else{
+		      $("#" + fileid).val('');
+		      $("#" + viewid).empty();
+		      $("#" + xdelid).hide();
+		    }
+		  });
+		
+		  $("#" + fileid).click();
+	});
+	
+	// 上传图片
+	$('#img_upload').bind('click', function(){
+		var errors = $("#img_view span[class='spanc']");
+		if(errors.length>0){
+			return;
+		}
+		var files = $("#img_view").children();
+		
+		var src_result = '';
+		for(var i=0; i<files.length; i++){
+			var src = '';
+			var v = files[i];
+			var file = $(v).find('input[type="file"]')[0];
+			var display_none = $(v).find('[style="display:none;"]'); // 已经删除的
+			var display_block = $(v).find('[style="display:block;"]'); // 没有删除的
+			if(display_none.length>0){
+				console.log('删除选择'+file.id);
+			} else {
+				console.log('未删除选项'+file.id);
+				src = ajaxFileUpload(file.id);
+			}
+			if(src!='' && src!='error'){
+				src_result = src_result+src+';';
+			}
+		}
+		$('#result_image').val(src_result.substring(0,src_result.length-2));
+	});
+});
+
+
+function ajaxFileUpload(uploadFileId) {
+    $("#loading").ajaxStart(function(){
+    	$("#loading").css("display","block");
+   	});
+   	$("#loading").ajaxComplete(function(){
+   		$("#loading").css("display","none");
+   	});
+    
+   $.ajaxFileUpload({
+        url:'<%=basePath %>${uploadImageURL}',             //需要链接到服务器地址  
+        secureuri:false,
+        fileElementId : uploadFileId,                         //文件选择框的id属性  
+        dataType: 'json',                                     //服务器返回的格式，可以是json  
+        success: function (data, status)             //相当于java中try语句块的用法  
+        {
+       	 if(data.status==1){
+       		 return data.src;
+       		 // $('#result').append('上传图片成功!请复制图片地址<br/>'+data.src+'</br>');
+       		 // $('#result_img').attr('src',"${pageContext.request.contextPath}"+data.src);
+       		 // $('#result_img').show();
+       	 } else {
+       		 // $('#result').html('上传图片失败'+data.msg);
+       		 return 'error';
+       	 }
+       	 /* alert(status+" | "+data.status);       //data是从服务器返回来的值     
+            $('#result').html('上传图片成功!请复制图片地址<br/>'+data.src);   */
+        },
+        error: function (data, status, e)             //相当于java中catch语句块的用法  
+        {
+            $('#result').html('上传图片失败');  
+        }  
+      }  
+    );  
+} --%>
+
+</script> 
+
 </head>
 <body>
 	<div class="login-title text-center">
@@ -25,7 +272,7 @@
 		<font>Add Event </font>	
 		</h3>
 	</div>
-	<form action=""  method="post" id="myform"  >
+	<form  id="myform" action="doUpload.jsp" method="post" enctype="multipart/form-data" >
 			<div class="form-group">
 				<div class="col-xs-12  ">
 				 	<div class="input-group">
@@ -36,7 +283,7 @@
 						</tr>
 						<tr>
 							<td class="tdp">
-					 			<input id="" type="text" />
+					 			<input id="title" type="text" />
 							</td>
 						</tr>
 						<tr>
@@ -45,7 +292,7 @@
 						</tr>
 						<tr>
 							<td class="tdp">
-					 			<textarea rows="3" cols="" style="margin:0;padding:0;width:100%;"></textarea>
+					 			<textarea id="location" rows="3" cols="" style="margin:0;padding:0;width:100%;"></textarea>
 							</td>
 						</tr>
 						<tr>
@@ -53,7 +300,7 @@
 						</tr>
 						<tr>
 							<td class="tdp">
-								<input id="" type="text" />
+								<input id="starttime"  type="text" />
 							</td>
 						</tr>
 						<tr>
@@ -62,7 +309,7 @@
 						</tr>
 						<tr>
 							<td class="tdp">
-								<input id="" type="text" />
+								<input id="endtime" name="endtime" type="text" />
 							</td>
 						</tr>
 						<tr>
@@ -71,7 +318,7 @@
 						</tr>
 						<tr>
 							<td class="tdp">
-								<textarea rows="3" cols="" style="margin:0;padding:0;width:100%;"></textarea>
+								<textarea  id="targetedaudience" rows="3" cols="" style="margin:0;padding:0;width:100%;"></textarea>
 							</td>
 						</tr>
 						<tr>
@@ -80,29 +327,391 @@
 						</tr>
 						<tr>
 							<td  class="tdp">
-								<textarea rows="3" cols="" style="margin:0;padding:0;width:100%;"></textarea>
+								<textarea id="description" rows="3" cols="" style="margin:0;padding:0;width:100%;"></textarea>
 							</td>
+						</tr>
+						<tr>
+							<td class="tdt">mainImage
+							</td>
+						</tr>
+						<tr>
+							 <td  class="tdp">
+
+								<!-- <input id='mainfile' name="file" type="file" size="20" /> -->
+								
+								<div  style='display:inline-block;width:150px;float:left;'>
+								  <div class='' style='float: left;'>
+								    <a style='display: inline-block;position: relative;overflow: hidden;' href='javascript:void(0);' >
+								      <span>添加图片</span>
+								      <input id='fileid' type='file' name='file' class='ipt-bg' />
+								    </a>
+								    <a style='display: inline-block;position: relative;overflow: hidden;' href='javascript:void(0);' >
+								      <span onclick='ajaxFileUpload_main("fileid");'>更新</span>
+								    </a>
+								  </div>
+								  <div id='viewid' ></div>
+								</div>
+								<input id="mainimage" value="" type="text" style='display:none;'/>
+
+							</td>   
 						</tr>
 						<tr>
 							<td class="tdt">Image
 							</td>
 						</tr>
 						<tr>
-							<td  class="tdp">
-								
-								<input name="file" type="file" size="20" accept=".jpg">
-							</td>
+							 <td  class="tdp">
+							 	<!-- <span id="result"></span> -->
+								<input id="img_add" type="button" value="添加图片" />
+								<input id="img_upload" type="button" value="更新" />
+								<div id="img_view" style='width:100%;'></div>
+								<img id="loading" src="<%=basePath %>/js/img/loading.gif" style="display:none;width:20px;">
+								<!-- <input name="file" type="file1" size="20" accept=".jpg"> -->
+								<input id="result_image" value="" type="text" style='display:none;'/>
+							</td>   
 						</tr>
+						
 					</table>
 					</div>
+					<button type="button" class="btn btn-sm btn-info" onclick="submitinfo()" >add
+					</button>
 				</div>
 			</div>
 		</form>
+
+   
+<script>
+
+
+function ajaxFileUpload_main(uploadFileId) {
+    $("#loading").ajaxStart(function(){
+    	$("#loading").css("display","block");
+   	});
+   	$("#loading").ajaxComplete(function(){
+   		$("#loading").css("display","none");
+   	});
+   	console.log(11+new Date());
+    $.ajaxFileUpload({
+        url:'${uploadImageURL}&'+new Date(),             //需要链接到服务器地址  
+        secureuri:false,
+        fileElementId : uploadFileId,                         //文件选择框的id属性  
+        dataType: 'json',                                     //服务器返回的格式，可以是json  
+        success: function (data, status)             //相当于java中try语句块的用法  
+        {
+	       	 if(data.status==1){
+	       		 var src_result = data.src;
+	       		 $('#mainimage').val(src_result);
+	       		// $('#result_image').val($('#result_image').val()+src_result+";");
+	       		// console.log('src_result : '+$('#result_image').val());
+	       		// return data.src;
+	       		 // $('#result').append('上传图片成功!请复制图片地址<br/>'+data.src+'</br>');
+	       		 // $('#result_img').attr('src',"${pageContext.request.contextPath}"+data.src);
+	       		 // $('#result_img').show();
+	       	 } else {
+	       		 // $('#result').html('上传图片失败'+data.msg);
+	       		 // return 'error';
+	       	 }
+	       	 /* alert(status+" | "+data.status);       //data是从服务器返回来的值     
+	            $('#result').html('上传图片成功!请复制图片地址<br/>'+data.src);   */
+        },
+        error: function (data, status, e)             //相当于java中catch语句块的用法  
+        {
+            $('#result').html('上传图片失败');  
+        }  
+      });
+}
+
+// $('#starttime').datepicker();
+
+
+function ajaxFileUpload(uploadFileId) {
+    $("#loading").ajaxStart(function(){
+    	$("#loading").css("display","block");
+   	});
+   	$("#loading").ajaxComplete(function(){
+   		$("#loading").css("display","none");
+   	});
+   	console.log(11+new Date());
+    $.ajaxFileUpload({
+        url:'${uploadImageURL}&'+new Date(),             //需要链接到服务器地址  
+        secureuri:false,
+        fileElementId : uploadFileId,                         //文件选择框的id属性  
+        dataType: 'json',                                     //服务器返回的格式，可以是json  
+        success: function (data, status)             //相当于java中try语句块的用法  
+        {
+	       	 if(data.status==1){
+	       		 var src_result = data.src;
+	       		$('#result_image').val($('#result_image').val()+src_result+";");
+	       		 console.log($('#result_image').val());
+	       		 $('#'+uploadFileId).attr('result_src', src_result);
+	       		// return data.src;
+	       		 // $('#result').append('上传图片成功!请复制图片地址<br/>'+data.src+'</br>');
+	       		 // $('#result_img').attr('src',"${pageContext.request.contextPath}"+data.src);
+	       		 // $('#result_img').show();
+	       	 } else {
+	       		 // $('#result').html('上传图片失败'+data.msg);
+	       		 // return 'error';
+	       	 }
+	       	 /* alert(status+" | "+data.status);       //data是从服务器返回来的值     
+	            $('#result').html('上传图片成功!请复制图片地址<br/>'+data.src);   */
+        },
+        error: function (data, status, e)             //相当于java中catch语句块的用法  
+        {
+            $('#result').html('上传图片失败');  
+        }  
+      });
+}
+
+
+/**************
+ * 添加一个图片 
+ ****************/
+ 
+$("#fileid").bind("click",function(){
+    var $this =$(this);
+    var browser={
+      isIE:function(ver){
+        var b = document.createElement('b');
+        b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+        return b.getElementsByTagName('i').length === 1;
+      }
+    };
+    $this.change(function(){
+      var regex=/(.*)\.(jpg|jpeg|png)$/;
+      var val = $this.val();
+      if(!regex.test(val)){
+        $("#viewid").html("<span class='spanc'>请选择正确的图片（jpg、jpeg、png）!</span>");
+        // $("#" + xdelid).show();
+        $("#xdelid").attr('style','display:inline-block;');
+        return;
+      }
+      if(browser.isIE(6)){
+        HanderOther($this);
+      }else if(browser.isIE(7) || browser.isIE(8) || browser.isIE(9)){
+        HanderIE789($this);
+      }else if(window.FileReader){
+        HanderFileReader($this);
+      }else{
+        $("#viewid").html("<span class='spanc'>该浏览器不支持预览图片!</span>");
+        // $("#" + xdelid).show();
+        $("#xdelid").attr('style','display:inline-block;');
+      }
+      function HanderFileReader($this){
+        var oFReader = new window.FileReader(),
+        rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+        oFReader.onload = function (oFREvent){
+          $("#viewid").html("<img src='"+oFREvent.target.result+"' style='width:100%;height:100%;'/>");
+          // $("#" + xdelid).show();
+          $("#xdelid").attr('style','display:inline-block;');
+        };
+        var aFiles = $this.get(0).files;
+        if (aFiles.length == 0) { return; }
+        if (!rFilter.test(aFiles[0].type)) { 
+          $("#viewid").html("<span class='spanc'>请选择正确的图片（jpg、jpeg、png）!</span>"); 
+          // $("#" + xdelid).show();
+          $("#xdelid").attr('style','display:inline-block;');
+          return; 
+        }
+        oFReader.readAsDataURL(aFiles[0]);
+      }
+      function HanderIE789($this){
+        if(options.width != null && parseInt(options.width) > 0){
+          $("#viewid").css("width",options.width + "px");
+        }else{
+          $("#viewid").css("width","378px");
+        }
+        if(options.height != null && parseInt(options.height) > 0){
+          $("#viewid").css("height",options.height + "px");
+        }else{
+          $("#viewid").css("height","358px");
+        }
+        $("#viewid").css("filter","progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src='"+GetImgSrc($this)+"')");
+        // $("#" + xdelid).show();
+        $("#xdelid").attr('style','display:inline-block;');
+      }
+      function HanderOther($this){
+        $("#viewid").html("<img src='"+$this.val()+"' style='width:100%;height:100%;'/>");
+        // $("#" + xdelid).show();
+        $("#xdelid").attr('style','display:inline-block;');
+      }
+      function GetImgSrc($this){
+        $this.select();
+        $this.blur();
+        var imgSrc =document.selection.createRange().text;
+        document.selection.empty();
+        return imgSrc;
+      }
+    });
+  });
+
+ 
+
+/**************
+ * 添加多个图片 
+ ****************/
+
+// 添加图片
+$('#img_add').bind('click',function(){
+	var time = new Date().getTime();
+	var fileid = "file" + time;
+	var xdelid = "xdel" + time;
+	var delid = "del" + time;
+	var viewid = "view" + time;
+	var htm = "" +
+	"<div  style='display:inline-block;width:150px;float:left;'>" +
+	  "<div class='dft'>" +
+	    "<a class='btn-pic btn-pic-bg' href='javascript:void(0);' >" +
+	      "<span>上传图片</span>" +
+	      "<input id='" + fileid + "' type='file' name='file' class='ipt-bg' />" +
+	    "</a>" +
+	  "</div>" +
+	  "<div id='" + xdelid + "' class='drt'>" +
+	    "<a class='btn-pic btn-pic-bg' href='javascript:void(0)'>" +
+	      "<span id='" + delid + "' >删除图片</span>" +
+	      "<input type='button'  class='ipt-bg'/>" +
+	    "</a>" +
+	  "</div>" +
+	  "<div id='" + viewid + "' ></div>";
+	"</div>" +
+	$("#img_view").append(htm);
 	
+	$("#" + fileid).bind("click",function(){
+	    var $this =$(this);
+	    var browser={
+	      isIE:function(ver){
+	        var b = document.createElement('b');
+	        b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+	        return b.getElementsByTagName('i').length === 1;
+	      }
+	    };
+	    $this.change(function(){
+	      var regex=/(.*)\.(jpg|jpeg|png)$/;
+	      var val = $this.val();
+	      if(!regex.test(val)){
+	        $("#" + viewid).html("<span class='spanc'>请选择正确的图片（jpg、jpeg、png）!</span>");
+	        // $("#" + xdelid).show();
+	        $("#" + xdelid).attr('style','display:inline-block;');
+	        return;
+	      }
+	      if(browser.isIE(6)){
+	        HanderOther($this);
+	      }else if(browser.isIE(7) || browser.isIE(8) || browser.isIE(9)){
+	        HanderIE789($this);
+	      }else if(window.FileReader){
+	        HanderFileReader($this);
+	      }else{
+	        $("#" + viewid).html("<span class='spanc'>该浏览器不支持预览图片!</span>");
+	        // $("#" + xdelid).show();
+	        $("#" + xdelid).attr('style','display:inline-block;');
+	      }
+	      function HanderFileReader($this){
+	        var oFReader = new window.FileReader(),
+	        rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+	        oFReader.onload = function (oFREvent){
+	          $("#" + viewid).html("<img src='"+oFREvent.target.result+"' style='width:100%;height:100%;'/>");
+	          // $("#" + xdelid).show();
+	          $("#" + xdelid).attr('style','display:inline-block;');
+	        };
+	        var aFiles = $this.get(0).files;
+	        if (aFiles.length == 0) { return; }
+	        if (!rFilter.test(aFiles[0].type)) { 
+	          $("#" + viewid).html("<span class='spanc'>请选择正确的图片（jpg、jpeg、png）!</span>"); 
+	          // $("#" + xdelid).show();
+	          $("#" + xdelid).attr('style','display:inline-block;');
+	          return; 
+	        }
+	        oFReader.readAsDataURL(aFiles[0]);
+	      }
+	      function HanderIE789($this){
+	        if(options.width != null && parseInt(options.width) > 0){
+	          $("#" + viewid).css("width",options.width + "px");
+	        }else{
+	          $("#" + viewid).css("width","378px");
+	        }
+	        if(options.height != null && parseInt(options.height) > 0){
+	          $("#" + viewid).css("height",options.height + "px");
+	        }else{
+	          $("#" + viewid).css("height","358px");
+	        }
+	        $("#" + viewid).css("filter","progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src='"+GetImgSrc($this)+"')");
+	        // $("#" + xdelid).show();
+	        $("#" + xdelid).attr('style','display:inline-block;');
+	      }
+	      function HanderOther($this){
+	        $("#" + viewid).html("<img src='"+$this.val()+"' style='width:100%;height:100%;'/>");
+	        // $("#" + xdelid).show();
+	        $("#" + xdelid).attr('style','display:inline-block;');
+	      }
+	      function GetImgSrc($this){
+	        $this.select();
+	        $this.blur();
+	        var imgSrc =document.selection.createRange().text;
+	        document.selection.empty();
+	        return imgSrc;
+	      }
+	    });
+	  });//绑定按钮事件
+	  
+	  $("#" + delid).bind("click",function(){
+	    var browser={
+	        isIE:function(ver){
+	          var b = document.createElement('b');
+	          b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+	          return b.getElementsByTagName('i').length === 1;
+	        }
+	      };
+	    if(browser.isIE(7) || browser.isIE(8) || browser.isIE(9)){
+	      $("#" + fileid).val('');
+	      $("#" + viewid).css("filter","");
+	      $("#" + viewid).css("width","");
+	      $("#" + viewid).css("height","");
+	      // $("#" + xdelid).hide();
+	      $("#" + xdelid).attr('style','display:none;');
+	    }else{
+	      $("#" + fileid).val('');
+	      $("#" + viewid).empty();
+	      // $("#" + xdelid).hide();
+	      $("#" + xdelid).attr('style','display:none;');
+	    }
+	    
+	    
+	    var src_all = $('#result_image').val();
+	    var src = $("#" + fileid).attr('result_src');
+	    src_all = src_all.replace(src+";",'');
+	    $('#result_image').val(src_all);
+	    $.post("${delImageURL}"+new Date(),
+	  		  {
+	  			imgFile:src
+	  		  },
+	  		  function(data,status){
+	  			  
+	  		  },"json");
+	    
+	  });
+	  $("#" + fileid).click();
+});
+
+// 上传图片
+$('#img_upload').bind('click', function(){
+	var errors = $("#img_view span[class='spanc']");
+	if(errors.length>0){
+		return;
+	}
+	var files = $("#img_view").children();
 	
-	
-	
-	
-	
+	for(var i=0; i<files.length; i++){
+		var v = files[i];
+		var file = $(v).find('input[type="file"]')[0];
+		var display_none = $(v).find('[style="display:none;"]'); // 已经删除的
+		var display_block = $(v).find('[style="display:block;"]'); // 没有删除的
+		if(display_none.length>0){
+			console.log('删除选择'+file.id);
+		} else {
+			console.log('未删除选项'+file.id);
+			ajaxFileUpload(file.id);
+		}
+	}
+});
+</script>
 </body>
 </html>

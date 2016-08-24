@@ -39,7 +39,7 @@ import com.wechat.info.InfoDao;
 		
 		private ResourceRequest request;
 		private ResourceResponse response;
-		 ;
+		 
 		
 		
 		@Before

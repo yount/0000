@@ -1,12 +1,11 @@
 $(document).ready(function() {
-
 });
 function trim(str){ //删除左右两端的空格
 	return str.replace(/(^s*)|(s*$)/g, "");
 }
 function TurnToRegisterPage() {
     var openId=$("#openId").val();
-    //alert(openId);
+   
     
 	window.location.href = "../user/registerPage?openId="+openId;
 };
@@ -59,25 +58,6 @@ function Submit() {
 };
 
 
-
-//function Register(){
-//	if(flagEmail||flagEmpId||flagPassword||flagSubmit){
-//		alert("Please enter right information");
-//		
-//	}else{
-//		if(trim($("#email")).val()===""){
-//			$("#checkEmail").show();
-//		}else if(trim($("#empId").val())===""){
-//			$("#checkEmpId").show();
-//		}else if(trim($("#password").val())===""){
-//			$("#checkPassword").show();
-//		}else if(trim($("#repassword").val())===""){
-//			$("#checkInfo").show();
-//		}else{			
-//			$("#myform").submit();			
-//		}
-//	}
-//}
 
 
 

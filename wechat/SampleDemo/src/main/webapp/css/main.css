@@ -2,7 +2,7 @@
  	.detailtable {  
 		align:center;
 		text-align: right;
-		
+		table-layout: fixed;
  	}
  	.detailtable .tdt{ 
  	background:#97cbff;

@@ -111,7 +111,7 @@ function Login(){
 	    alert("Data: " + data + "\nStatus: " + status);
 	  }); */
 // 	$.post("http://localhost:8081/c/portal/login",
-	$.post("http://121.43.175.85:8888/c/portal/login",
+	$.post("http://employee.perficientgdc.com.cn:8888/c/portal/login?"+new Date(),
 		  {
 			parameterAutoLoginLogin:email,
 			parameterAutoLoginPassword:password
