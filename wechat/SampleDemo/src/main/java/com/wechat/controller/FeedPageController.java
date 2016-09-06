@@ -1,6 +1,8 @@
 package com.wechat.controller;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.portlet.RenderRequest;
@@ -37,39 +39,49 @@ public class FeedPageController {
 	}
 
 	@RenderMapping(params = "destination=toInfo")
-	public ModelAndView toInfo(RenderRequest request, RenderResponse response)
-			throws NestableException {
-		ModelMap model = new ModelMap();
-		User user = PortalUtil.getUser(request);
+	public ModelAndView toInfo(RenderRequest request, RenderResponse response){
 		
-		model.addAttribute("user", user);
-		if(user!=null){
-			List<EventInfoBean> infos = InfoDao.getInfos("",user.getUserId());
-			model.addAttribute("infos", infos);
-			return new ModelAndView("info",model);
-		} else {
-			model.addAttribute("jump",true);
-			return new ModelAndView("register",model);
+		try{
+			ModelMap model = new ModelMap();
+			User user = PortalUtil.getUser(request);
+			
+			model.addAttribute("user", user);
+			if(user!=null){
+				List<EventInfoBean> infos = InfoDao.getInfos("",user.getUserId());
+				model.addAttribute("infos", infos);
+				return new ModelAndView("info/info",model);
+			} else {
+				model.addAttribute("jump",true);
+				return new ModelAndView("register",model);
+			}
+		}catch(Exception e){
+			
 		}
+		return null;
+		
 	}
 	
 	@RenderMapping(params = "destination=toInfoDetail")
-	public ModelAndView toInfoDetail(RenderRequest request, RenderResponse response)
-			throws NestableException {
-		ModelMap model = new ModelMap();
+	public ModelAndView toInfoDetail(RenderRequest request, RenderResponse response){
+		try{
+			ModelMap model = new ModelMap();
+			SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			User user = PortalUtil.getUser(request);
+			String infoUUID = ParamUtil.getString(request, "infoUUID");
 		
-		User user = PortalUtil.getUser(request);
-		String infoUUID = ParamUtil.getString(request, "infoUUID");
-	
-		List<EventInfoBean> infos = InfoDao.getInfos(" and uuid = '"+infoUUID + "' ", user.getUserId());
-		
-		if(!infos.isEmpty()){
-			model.addAttribute("info", infos.get(0));
-//			String multipleImages=infos.get(0).info.getImageURL();
-//			System.out.println(multipleImages);
-//			model.addAttribute("multipleImages",multipleImages);
+			List<EventInfoBean> infos = InfoDao.getInfos(" and uuid = '"+infoUUID + "' ", user.getUserId());
+			
+			if(!infos.isEmpty()){
+				model.addAttribute("info", infos.get(0));
+				model.addAttribute("startTime", infos.get(0).getInfo().getStartTime()==null?null:formatDate.format(infos.get(0).getInfo().getStartTime()));
+				model.addAttribute("endTime", infos.get(0).getInfo().getEndDate()==null?null:formatDate.format(infos.get(0).getInfo().getEndDate()));
+			}
+			return new ModelAndView("info/infoDetail",model);
+		}catch(Exception e){
+			
 		}
-		return new ModelAndView("info/infoDetail",model);
+		return null;
+		
 	}
 	
 	@RenderMapping(params = "destination=addInfo")
@@ -77,21 +89,41 @@ public class FeedPageController {
 			throws NestableException {
 		ModelMap model = new ModelMap();
 		
-		return new ModelAndView("info/addInfo",model);
+		return new ModelAndView("admin/addInfo",model);
 	}
 	
-	@RenderMapping(params = "destination=tohomepage")
-	public ModelAndView tohomepage(RenderRequest request, RenderResponse response)
+	@RenderMapping(params = "destination=toHomePage")
+	public ModelAndView toHomePage(RenderRequest request, RenderResponse response)
 			throws NestableException {
 	
         ModelMap model = new ModelMap();
 		
-		return new ModelAndView("home",model);
+		return new ModelAndView("info/home",model);
 	
 	}	
+	@RenderMapping(params = "destination=toHelpPage")
+	public ModelAndView toHelpPage(RenderRequest request, RenderResponse response)
+			throws NestableException {
 	
+        ModelMap model = new ModelMap();
+		
+		return new ModelAndView("help",model);
 	
+	}
+	@RenderMapping(params = "destination=toPasswordPage")
+	public ModelAndView toPasswordPage(RenderRequest request, RenderResponse response)
+			throws NestableException {
 	
+        ModelMap model = new ModelMap();
+		return new ModelAndView("password",model);
 	
-	
+	}
+	@RenderMapping(params = "destination=publish")
+	public ModelAndView publish(RenderRequest request, RenderResponse response)
+			throws NestableException {
+		ModelMap model = new ModelMap();
+		
+		return new ModelAndView("info/publish",model);
+	}
+
 }

@@ -1,10 +1,13 @@
 package com.wechat.info;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class InfoBean {
 	private String uuid; // 主键 
 	private String createId; // 创建者id
+	private String createUserName; // 创建者
+
 	private Date createDate; // 创建时间
 	private Date endDate; // 到期时间
 	private String title; // 消息抬头
@@ -27,8 +30,6 @@ public class InfoBean {
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-
-	
 	
 	public String getUuid() {
 		return uuid;
@@ -109,4 +110,11 @@ public class InfoBean {
 		this.mainImageURL = mainImageURL;
 	}
 	
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
 }

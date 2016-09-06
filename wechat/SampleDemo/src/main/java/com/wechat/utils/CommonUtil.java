@@ -99,7 +99,7 @@ public class CommonUtil {
 	public static long LAST_TIME = 0;
 	
 	// 一个小时的毫秒数
-	public final static long ONE_HOUR = 2*60*60*1000; 
+	public final static long ONE_HOUR = (long) (1.5*60*60*1000); 
 	
 	public static String ACCESS_TOKEN = null;
 	/**

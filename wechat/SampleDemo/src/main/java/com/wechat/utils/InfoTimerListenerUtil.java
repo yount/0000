@@ -21,7 +21,7 @@ public class InfoTimerListenerUtil implements ServletContextListener {
 		timer =new Timer(true);
 		//event.getServletContext().log("定时器已启动");
 		try{
-			//timer.schedule(new InfoTimerTask(event.getServletContext()),60000,time);
+			timer.schedule(new InfoTimerTask(event.getServletContext()),60000,time);
 		}catch(Exception e){
 			  throw new RuntimeException(e);
 		}

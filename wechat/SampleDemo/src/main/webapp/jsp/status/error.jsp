@@ -13,10 +13,7 @@
 		<h2>${errorInfo}</h2>
 		
 	</div>
-	<%-- <portlet:renderURL var="redirectToHomePageUrl"></portlet:renderURL> --%>
 	<div>
-		<h1>login failed</h1>
-		<%-- <a href="${redirectToHomePageUrl}">home</a> --%>
 	</div>
 
 </body>

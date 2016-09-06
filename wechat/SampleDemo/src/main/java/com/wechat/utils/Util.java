@@ -7,6 +7,9 @@ import java.util.Properties;
 import java.util.UUID;
 
 public class Util {
+	private Util(){
+		
+	}
 	private static Properties prop=new Properties();
 	public static String getUUID(){
 		return UUID.randomUUID().toString();

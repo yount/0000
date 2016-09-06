@@ -3,6 +3,7 @@ package com.wechat.controller;
 import static org.easymock.EasyMock.*; 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,7 +192,7 @@ public class FeedPageControllerTest {
     
     
    @Test  
-   public void testtologin() throws NestableException{  
+   public void testTologin() throws NestableException{  
 	   
 	   User user = createMock(User.class); 
 	PowerMock.mockStatic(PortalUtil.class);
@@ -212,7 +213,7 @@ public class FeedPageControllerTest {
    
  
     @Test  
-    public void testtoInfo() throws NestableException{  
+    public void testToInfo() throws NestableException, ParseException{  
 
     		List<EventInfoBean> infos = new ArrayList<EventInfoBean>();
     		User user = createMock(User.class); 
@@ -230,12 +231,12 @@ public class FeedPageControllerTest {
         	model.addAttribute("infos", infos);
         	 System.out.print(user);
         	ModelAndView m = feedpageController.toInfo(request, response);
-			assertEquals(m.getViewName(),"info");
+			assertEquals(m.getViewName(),"info/info");
 			assertEquals(m.getModelMap().toString(),model.toString());
 		}  
     
     @Test  
-    public void testtoInfoone() throws NestableException{  
+    public void testToInfoOne() throws NestableException, ParseException{  
     		List<EventInfoBean> infos = new ArrayList<EventInfoBean>();
     		PowerMock.mockStatic(PortalUtil.class);
     		EasyMock.expect(PortalUtil.getUser(request)).andReturn(null);
@@ -250,7 +251,7 @@ public class FeedPageControllerTest {
     
 
     @Test
-    public void testtoInfoDetail() throws NestableException{ 
+    public void testToInfoDetail() throws NestableException, ParseException{ 
     	
     	
 		List<EventInfoBean> infos = new ArrayList<EventInfoBean>();
@@ -275,10 +276,24 @@ public class FeedPageControllerTest {
 		//assertEquals(m.getModelMap().toString(),model.toString());
 	}  
     @Test
-    public void testaddInfo() throws NestableException{
+    public void testAddInfo() throws NestableException{
     	ModelMap model = new ModelMap();
     	ModelAndView m=feedpageController.addInfo(request, response);
-    	assertEquals(m.getViewName(),"info/addInfo");
+    	assertEquals(m.getViewName(),"admin/addInfo");
+    }
+    
+    @Test
+    public void testToHomePage() throws NestableException{
+    	ModelMap model = new ModelMap();
+    	ModelAndView m=feedpageController.toHomePage(request, response);
+    	assertEquals(m.getViewName(),"info/home");
+    }
+    
+    @Test
+    public void testPublish() throws NestableException{
+    	ModelMap model = new ModelMap();
+    	ModelAndView m=feedpageController.publish(request, response);
+    	assertEquals(m.getViewName(),"info/publish");
     }
     
 

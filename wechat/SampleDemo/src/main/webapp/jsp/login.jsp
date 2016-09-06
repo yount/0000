@@ -19,12 +19,18 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+	<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate"> 
+	<meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="expires" content="-10">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title></title>
 <%
 	String path = request.getContextPath();
+	String serverPortPath=request.getScheme() + "://"
+		+ request.getServerName() + ":" + request.getServerPort()+"/";
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
@@ -46,15 +52,16 @@
 					<small>Member Login</small>
 				</h1>
 			</div>
-			<div class="register-content ">
+			<div class="register-content " style="text-align:center">
 				<div class="form">
 					<form action=""  method="post" id="myform">
 						<div class="form-group">
 							<div class="col-xs-12  ">
 								<div class="input-group">
 									<span class="input-group-addon"><span
-										class="glyphicon glyphicon-user"></span></span> <input type="text"
-										  id="email" name="email" class="form-control" required autofocus autocomplete="off" 
+										class="glyphicon glyphicon-user"></span></span> 
+										<input type="text" 
+										  id="email" name="email" class="form-control" required  autocomplete="off" 
 										placeholder="Email Address" onblur="EmailCheck(this.value)" onclick="clearInput(this.id,'checkEmail');setDisplayNone('checkEmail');">
 									<span class="input-group-addon" id="checkEmail"
 										style="display: none; color: red">Please input a real
@@ -95,23 +102,18 @@
 	</div>
 
 	<div style="text-align: center;"></div>
-	
+	<input type="hidden" id="serverPortPath" value="<%=serverPortPath%>"/>
 <script src="<%=basePath%>js/jquery-1.7.2.min.js"></script>
 <script src="<%=basePath%>js/jquery.mailAutoComplete-3.1.js"></script>
 <script src="<%=basePath%>js/main.js"></script> 
 <script>
 $("#email").mailAutoComplete(); 
 function Login(){
-	// http://localhost:8080/c/portal/login?parameterAutoLoginLogin=bruce.banner&parameterAutoLoginPassword=green
 	var email = $('#email').val();
 	var password = $('#password').val();
-	/* var url = "http://localhost:8090/c/portal/login?parameterAutoLoginLogin="+email+"&parameterAutoLoginPassword="+password;
-	$.get(url,function(data,status){
-		alert(111);
-	    alert("Data: " + data + "\nStatus: " + status);
-	  }); */
-// 	$.post("http://localhost:8081/c/portal/login",
-	$.post("http://employee.perficientgdc.com.cn:8888/c/portal/login?"+new Date(),
+	var serverPortPath=$('#serverPortPath').val();
+	$.post(serverPortPath+"c/portal/login?"+new Date(),
+	// $.post("http://employee.perficientgdc.com.cn:8888/c/portal/login?"+new Date(),
 		  {
 			parameterAutoLoginLogin:email,
 			parameterAutoLoginPassword:password

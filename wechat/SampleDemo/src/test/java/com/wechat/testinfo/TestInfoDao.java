@@ -3,6 +3,7 @@ package com.wechat.testinfo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.easymock.EasyMock;
@@ -27,7 +28,7 @@ import com.wechat.info.InfoDao;
 @PrepareForTest({DataAccess.class,})
 public class TestInfoDao {
 	@Test
-	public void testInfoDao() throws SQLException, ClassNotFoundException {
+	public void testInfoDao() throws SQLException, ClassNotFoundException, ParseException {
 		PowerMock.mockStatic(DataAccess.class);
 		Class.forName("com.mysql.jdbc.Driver");
 		String url="jdbc:mysql://10.2.1.191:3306/lportal?useUnicode=true&characterEncoding=UTF8&useFastDateParsing=false";

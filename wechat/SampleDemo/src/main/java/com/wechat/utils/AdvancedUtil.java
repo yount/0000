@@ -1,13 +1,15 @@
 package com.wechat.utils;
 
-import java.util.logging.Logger;
 
+import com.sun.istack.logging.Logger;
 import com.wechat.po.SNSUserInfo;
 import com.wechat.po.WeixinOauth2Token;
 
 import net.sf.json.JSONObject;
 
 public class AdvancedUtil {
+	private static Logger log=Logger.getLogger(AdvancedUtil.class);
+	
 	  private AdvancedUtil (){
 		  super();
 	  }
@@ -17,7 +19,7 @@ public class AdvancedUtil {
 	public static WeixinOauth2Token getOauth2AccessToken(String appid,String appSecret,String code){
 		
 		WeixinOauth2Token wat = null;
-		Logger log=Logger.getLogger("log");
+		
 		String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 		requestUrl = requestUrl.replace("APPID", appid);
 		requestUrl = requestUrl.replace("SECRET", appSecret);
@@ -32,9 +34,8 @@ public class AdvancedUtil {
 				wat.setRefreshToken(jsonObject.getString("refresh_token"));
 				wat.setScope(jsonObject.getString("scope"));				
 			} catch(Exception e){
-				
 				wat = null;
-				log.log(null,"content",e);
+				log.info(e.getMessage());
 			}
 		}
 		return wat;
@@ -43,7 +44,6 @@ public class AdvancedUtil {
 	public static SNSUserInfo getSNSUserInfo(String accessToken,String openId){
 		
 		SNSUserInfo snsUserInfo = null;
-		Logger log=Logger.getLogger("log");
 		/**拼接请求地址**/
 		String requestUrl = "https://api.weixin.qq.com/sns/"
 				+ "userinfo?access_token=ACCESS_TOKEN&openid=OPENID";
@@ -57,7 +57,8 @@ public class AdvancedUtil {
 			
 			}catch(Exception e){
 				snsUserInfo = null;
-				log.log(null,"content",e);
+				// log.log(null,"content",e);
+				log.info(e.getMessage());
 			}
 		}
 		return snsUserInfo;		

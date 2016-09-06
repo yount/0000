@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.Cookie;
@@ -20,7 +21,10 @@ import net.sf.json.JSONObject;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.wechat.po.SNSUserInfo;
 import com.wechat.po.WeixinOauth2Token;
@@ -37,13 +41,14 @@ public class OAuthServlet extends HttpServlet{
 	
 	public final static String APPID = "wx29e52cd7861daba6";
 	public final static String APPSECRET = "46c484e0faee213f079709cf9bed69d1";
+	private Logger log = Logger.getLogger("log");
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response){
 
 		Properties prop=Util.getUrlProperties();
 
 		String urlAndPort=prop.getProperty("url").trim()+":"+prop.getProperty("port").trim();
-		Logger log = Logger.getLogger("log");
+		
 		try {
 			request.setCharacterEncoding("gb2312");
 			response.setCharacterEncoding("gb2312");
@@ -63,26 +68,62 @@ public class OAuthServlet extends HttpServlet{
 			ResultSet rs = null;
 			PreparedStatement ps = null;
 			String sql = "select * from User_ where openid = ?";  
+			System.out.println(sql);
+			System.out.println("openId = "+openId);
 			try {
+				System.out.println("getConnection");
 				conn = DataAccess.getConnection();
+				System.out.println("conn.prepareStatement");
 				ps = conn.prepareStatement(sql); 
 				ps.setString(1, openId);
+				System.out.println(ps);
 				/**根据openId查询用户是否存在*/
 				rs = ps.executeQuery();
+				System.out.println("rs : "+rs);
 				if(rs.next()){
 					/**TODO：修改登录状态？**/
 //					System.out.println(rs.getRow());
+					System.out.println("before rs.getLong(userId);");
 					long userId = rs.getLong("userId");
-					User u = UserLocalServiceUtil.getUserById(userId);
+					String emailAddress = rs.getString("emailAddress");
+					
+					System.out.println(userId);
+					System.out.println("before UserLocalServiceUtil.getUserById(userId)");
+					User u = UserLocalServiceUtil.getUserById(userId); // companyid=20155
+					
+					// User u = UserLocalServiceUtil.fetchUserByEmailAddress(20155, emailAddress);
+					
+					Company company = CompanyLocalServiceUtil.getCompany(20155);
+					
+					System.out.println("before u.getEmailAddress()");
 					String email = u.getEmailAddress();
-					String password = u.getPassword();
+					System.out.println("before u.getPasswordUnencrypted()");
+					u.setPasswordEncrypted(false);
+					String password = u.getPasswordUnencrypted();
+					System.out.println("after u.getPasswordUnencrypted()");
+					if(password==null || password.contains("/")){
+						password = u.getPassword();
+					}
+					PasswordPolicy policy= u.getPasswordPolicy();
+					System.out.println("u.getPasswordEncrypted() : "+u.getPasswordUnencrypted());
+					System.out.println("u.getPassword() : "+u.getPassword());
+//					if(password.contains("/")){
+//						System.out.println("u.getPasswordEncrypted() : "+u.getPasswordEncrypted());
+//						System.out.println("u.getPassword() : "+u.getPassword());
+//						password = u.getPassword();
+//					}
+					// u.getPasswordUnencrypted()
 					/**跳转到index.jsp **/
 					/**http://localhost:8080/c/portal/login?parameterAutoLoginLogin=bruce.banner&parameterAutoLoginPassword=green**/
+					String url = urlAndPort+"/c/portal/login?parameterAutoLoginLogin="+email+"&parameterAutoLoginPassword="+password+"&"+System.currentTimeMillis();
+					System.out.println(url);
 					try {
-						System.out.println(urlAndPort+"/c/portal/login?parameterAutoLoginLogin=");
-						response.sendRedirect(urlAndPort+"/c/portal/login?parameterAutoLoginLogin="+email+"&parameterAutoLoginPassword="+password+"&"+System.currentTimeMillis());
+//						System.out.println(urlAndPort+"/c/portal/login?parameterAutoLoginLogin=");
+//						response.sendRedirect(urlAndPort+"/c/portal/login?parameterAutoLoginLogin="+email+"&parameterAutoLoginPassword="+password+"&"+System.currentTimeMillis());
+						response.sendRedirect(url);
 					} catch (IOException e) {
-						log.log(null, "context", e);
+						e.printStackTrace();
+						log.log(Level.INFO, "context", e);
 					}
 				}else{
 					response.setContentType("text/html;charset=utf-8");
@@ -99,34 +140,36 @@ public class OAuthServlet extends HttpServlet{
 					response.addCookie(cookie);
 					
 					try {
-//						System.out.println(urlAndPort+"?openId="+openId);
+						System.out.println(urlAndPort+"?openId="+openId);
 						response.sendRedirect(urlAndPort+"?openId="+openId+"&"+System.currentTimeMillis());
 					} catch (IOException e) {
-						log.log(null, "context", e);
+						e.printStackTrace();
+						log.log(Level.INFO, e.getMessage(), e);
 					}
 				}
 			} catch (Exception e) {
-				log.log(null, "context", e);
+				e.printStackTrace();
+				log.log(Level.INFO, e.getMessage(), e);
 			}finally{
 				if(ps!=null){
 					try{
 						ps.close();
 					}catch(Exception e){
-						log.log(null,"content",e);
+						log.log(Level.INFO,e.getMessage(),e);
 					}
 				}
 				if(rs!=null){
 					try{
 						rs.close();
 					}catch(Exception e){
-						log.log(null,"content",e);
+						log.log(Level.INFO,e.getMessage(),e);
 					}
 				}
 				if(conn != null){
 					try {
 						conn.close();
 					} catch (SQLException e) {
-						log.log(null, "context", e);
+						log.log(Level.INFO, e.getMessage(), e);
 					}
 				}
 			}

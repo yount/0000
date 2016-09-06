@@ -1,5 +1,39 @@
 $(document).ready(function() {
+	/*鼠标点击和键盘点击事件监听,如果密码过期跳转到重设密码页面*/
+	document.onmousedown=function(event){ 
+		PasswordStatus();
+	 };
+	document.onmousemove=function(event){
+		PasswordStatus();
+	};
+	document.onkeydown=function(event){ 
+		PasswordStatus();
+	 };
+	 /*移动端监听*/
+	 try{
+		 document.addEventListener('touchstart', touchSatrt, false);  
+	     document.addEventListener('touchmove', touchMove, false);  
+	     document.addEventListener('touchend', touchEnd, false); 
+	 }catch(e){
+		 //alert("can not suport touch screen");
+	 }
+	  
 });
+function touchSatrt(evt){
+	PasswordStatus();
+}
+function touchMove(evt){
+	PasswordStatus();
+}
+function touchEnd(evt){
+	PasswordStatus();
+}
+function PasswordStatus(){
+	if($('.alert-block').length>0){
+		toResetPassword();
+	}
+}
+
 function trim(str){ //删除左右两端的空格
 	return str.replace(/(^s*)|(s*$)/g, "");
 }

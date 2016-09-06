@@ -10,6 +10,10 @@
 	<portlet:param name="destination" value="toLogin" />
 </portlet:actionURL>
 
+<portlet:actionURL name="dispatchRequest" var="toHomeURL">
+	<portlet:param name="destination" value="toHomePage" />
+</portlet:actionURL>
+
 <portlet:actionURL name="dispatchRequest" var="toInfoURL">
 	<portlet:param name="destination" value="toInfo" />
 </portlet:actionURL>
@@ -37,9 +41,13 @@
 %>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+	<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate"> 
+	<meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="expires" content="-10">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title></title>
 <%
 	String path = request.getContextPath();
@@ -50,8 +58,18 @@
 
 <script type="text/javascript">
 
+function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    }else{
+        return false;
+    }
+}
 
-
+if(!isWeiXin()){
+	window.location.href="${toLoginURL}";
+}
 </script>
 </head>
 <body>
@@ -69,11 +87,11 @@
 						<span class="input-group-addon" id="showmsg" style="color: red">${msg }</span>
 						<div class="form-group">
 							<div class="col-xs-12  ">
-								<div class="input-group">
+								<div class="input-group" style="text-align:center">
 									<span class="input-group-addon">
 										<span class="glyphicon glyphicon-user"></span>
 									</span> 
-									<input type="text"
+									<input type="text" style="text-align:center"
 									  id="email" name="email" class="form-control" required autofocus autocomplete="off" 
 									placeholder="Email Address" onblur="EmailCheck(this.value)" onclick="clearInput(this.id,'checkEmail');setDisplayNone('checkEmail');">
 									<br/>
@@ -84,13 +102,13 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" style="text-align:center">
 							<div class="col-xs-12  ">
 								<div class="input-group">
 									<span class="input-group-addon">
 										<span class="glyphicon glyphicon-user"></span>
 									</span> 
-									<input type="text"
+									<input type="text"  style="text-align:center"
 									id="empId" name="empId" class="form-control"
 									placeholder="Employee ID" onblur="EmpIdCheck(this.value)" onclick="clearInput(this.id,'checkEmpId');setDisplayNone('checkEmpId');">
 									<br/>
@@ -195,7 +213,7 @@
 								  },
 								  function(data,status){
 									  if('success' == status){
-										  window.location.href="${ToHomePageUrl}";
+										  window.location.href="${toHomeURL}";
 									  } else {
 										  alert('emailaddress or password incorrect');
 									  }

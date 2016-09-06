@@ -8,9 +8,23 @@
 		 <instanceable>false</instanceable>  
            <requires-namespaced-parameters>false</requires-namespaced-parameters> 
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/css/uploadify.css</header-portlet-css>
+		<header-portlet-css>/jquery-ui-1.8.16.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css</header-portlet-css>
+		<header-portlet-css>/css/jquery-ui-timepicker-addon.css</header-portlet-css>
+		<header-portlet-css>/css/jquery-ui-1.8.17.custom.css</header-portlet-css>
+		<header-portlet-css>/jquery-ui-1.8.16.custom/css/ui-lightness/jquery.ui.slider.css</header-portlet-css>
 		<footer-portlet-javascript>/js/jquery-1.7.2.min.js</footer-portlet-javascript>
 		 <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		 <footer-portlet-javascript>/js/ajaxfileupload.js</footer-portlet-javascript>
+		 <footer-portlet-javascript>/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min.js</footer-portlet-javascript>
+		 <footer-portlet-javascript>/jquery-ui-1.8.16.custom/js/fz.js</footer-portlet-javascript>
+		 <footer-portlet-javascript>/jquery-ui-1.8.16.custom/js/jquery-ui-timepicker-addon.js</footer-portlet-javascript>
+		 <footer-portlet-javascript>/jquery-ui-1.8.16.custom/js/jquery.ui.slider.min.js</footer-portlet-javascript>
+		 <footer-portlet-javascript>/js/jquery-ui-1.8.17.custom.min.js</footer-portlet-javascript>
+		  <footer-portlet-javascript>/js/jquery-ui-timepicker-addon.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/js/ajaxfileupload.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/js/jquery.event.drag-1.5.min.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/js/jquery.touchSlider.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/js/jquery.uploadify.min.js</footer-portlet-javascript>
 		<css-class-wrapper>test</css-class-wrapper>
 	</portlet>
 	

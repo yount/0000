@@ -4,18 +4,18 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.MessagingException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.wechat.info.EventInfoBean;
+import com.wechat.utils.SendMailUtil;
 import com.wechat.utils.Util;
 
 @Controller
@@ -105,9 +105,6 @@ public class ResourceActionController {
 				ps.setLong(3, user.getUserId());
 				ps.executeUpdate();
 			} 
-
-			
-			
 			json.put("msg", jsonObject);
 			json.put("result", 1);
 			pw.println(json.toString());
@@ -197,7 +194,7 @@ public class ResourceActionController {
 			pw.println(json.toString());
 			return ;
 		} catch (Exception e) {
-			logger.log(null, "context", e);
+			
 		} finally{
 			if(pw!=null){
 				pw.flush();
@@ -207,66 +204,130 @@ public class ResourceActionController {
 		
 	}
 	
+	@ResourceMapping(value="ResetPassword")
+	@ResponseBody
+	public void ResetPassword(ResourceRequest request, ResourceResponse response){
+		PrintWriter pw = null;
+		JSONObject json = new JSONObject();
+		JSONObject msgJson = new JSONObject();
+		String password = ParamUtil.getString(request,"password");
+		//使用API更新密码
+		try{
+			User user = PortalUtil.getUser(request);
+			long userId=user.getUserId();
+			UserLocalServiceUtil.updatePassword(userId,password,password,false);
+			pw = response.getWriter();
+			
+			msgJson.put("success", "Reset password successfully");
+			json.put("result", "1");
+			json.put("msg", msgJson);
+			pw.println(json.toString());
+		}catch(Exception e){
+			logger.log(null, "context", e);
+		}finally{
+			if(pw!=null){
+				pw.flush();
+				pw.close();
+			}
+		}	
+	}
+	
+	
+	@ResourceMapping(value="sendMail")
+	@ResponseBody
+	public void sendMail(ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException, MessagingException{
+		PrintWriter pw = null;
+		JSONObject json = new JSONObject();
+		JSONObject msgJson=new JSONObject();
+		String content=ParamUtil.getString(request,"content");
+		User user = PortalUtil.getUser(request);
+		pw = response.getWriter();
+		
+		String toEmailAddress="wjx_cjhlTQL@163.com";
+		String subject="userId("+user.getUserId()+")/"+user.getFirstName()+"."+user.getLastName()+" need help!";
+
+		try{
+			SendMailUtil.sendEmail(toEmailAddress,subject,content);
+		}catch(UnsupportedEncodingException e){
+			msgJson.put("error", "failed to send email");
+			json.put("result", "0");
+			json.put("msg", msgJson);
+			pw.println(json.toString());
+			return ;
+		}
+		msgJson.put("success", "succeed in sending email to admin!");
+		json.put("result", "1");
+		json.put("msg", msgJson);
+		pw.println(json.toString());
+		return ;
+		
+	}
 	
 	
 	@ResourceMapping(value="addinfo")
 	@ResponseBody
 	public void addinfo(ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, SQLException, ParseException, IOException{
-		System.out.print("111");
 		PrintWriter pw = null;
 		JSONObject json = new JSONObject();
-		//SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 		User user = PortalUtil.getUser(request);
+		pw = response.getWriter();
 		String title = ParamUtil.getString(request, "title");
-		System.out.print(title);
 		String location = ParamUtil.getString(request, "location").trim();
-		System.out.print(location);
 		String start_time = ParamUtil.getString(request, "startTime").trim();
-		System.out.println("");
 		System.out.println(start_time);
-		//Date starttime = sdf.parse(start_time);
+		Date testDate = new Date(start_time);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startTime=format.format(testDate);
+	
 		String end_time = ParamUtil.getString(request, "endTime");
-		System.out.println(end_time);
-		//Date endtime = sdf.parse(end_time);
+		Date te = new Date(end_time);
+		SimpleDateFormat forma= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String endTime=forma.format(te);
+		
 		String targetedaudience = ParamUtil.getString(request, "targetedaudience").trim();
 		String description = ParamUtil.getString(request, "description").trim();
-		System.out.println(description);
 		String mainimage= ParamUtil.getString(request, "mainimage").trim();
-		String image= ParamUtil.getString(request, "result_image").trim();
-
+		String image= ParamUtil.getString(request, "image").trim();
+		String video= ParamUtil.getString(request, "video").trim();
+		
 		String uuid = Util.getUUID();
-		pw = response.getWriter();
 		
 		Connection conn = DataAccess.getConnection();
-		System.out.print("cc");
 		PreparedStatement ps;
-		String sql = "insert into p_info(uuid, createId, startTime, endTime, title,content,target_audience,event_location,status,mainImageUrl,imageUrl) values(?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into p_info(uuid, createId, startTime, endTime, title,content,target_audience,event_location,status,mainImageUrl,imageUrl,mediaUrl) values(?,?,?,?,?,?,?,?,?,?,?,?)";
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, uuid);
 		ps.setLong(2, user.getUserId());
-		ps.setString(3,start_time);
-		ps.setString(4, end_time);
+		ps.setString(3,startTime);
+		ps.setString(4, endTime);
 		ps.setString(5, title);
 		ps.setString(6, description);
 		ps.setString(7, targetedaudience);
 		ps.setString(8, location);
-		ps.setString(9, "1");
+		ps.setString(9, "0");
 		ps.setString(10, mainimage);
-		ps.setString(10, image);
+		ps.setString(11, image);
+		ps.setString(12, video);
 		ps.execute();
-		
-		
-		json.put("result", "0");
+		conn.close();
+		ps.close();
+		json.put("result", 1);
 		pw.println(json.toString());
+		pw.close();
 		
 	}
 	
 	
+//	private static String hostname = "121.43.175.85";
+//	private static int port = 21;
+//	private static String username = "root";
+//	private static String password = "123cjhlTQL";
 	private static String hostname = "121.43.175.85";
 	private static int port = 21;
+//	private static String username = "perficient";
+//	private static String password = "perficient";
 	private static String username = "root";
 	private static String password = "123cjhlTQL";
-	
 	@ResourceMapping(value="uploadImage")
 	@ResponseBody
 	public void uploadImage(ResourceRequest req, ResourceResponse resp) throws Exception{
@@ -285,7 +346,7 @@ public class ResourceActionController {
         JSONObject json = new JSONObject();
         
         try {
-	        String filePath = "images";  
+	        String filePath="images";  
 //	        String realPath = realDir+File.separator+filePath;  
 	        //判断路径是否存在，不存在则创建  
 //	        File dir = new File(realPath);  
@@ -310,7 +371,10 @@ public class ResourceActionController {
 	                try{
 	                    if(!fis.isFormField() && fis.getName().length()>0){
 	                        fileName = fis.getName();
-	                        Pattern reg=Pattern.compile("[.]jpg|png|jpeg|gif$");  
+	                        if(fileName.endsWith(".mp4")){
+	                        	filePath = "videos";
+	                        }
+	                        Pattern reg=Pattern.compile("[.]jpg|png|jpeg|gif|mp4$");  
 	                        Matcher matcher=reg.matcher(fileName);  
 	                        if(!matcher.find()) {
 	                            state = "文件类型不允许！";
@@ -346,14 +410,14 @@ public class ResourceActionController {
 	                    }  
 	  
 	                }catch(Exception e){
-	                    e.printStackTrace();  
+	                	logger.log(null, "context", e); 
 	                }  
 	            }  
 //	            response.getWriter().println(json.toString());
 	            resp.getWriter().println(json.toString());
 	        }  
         }catch(Exception ee) {
-            ee.printStackTrace();  
+        	logger.log(null, "context", ee);
         }
 	}
 	
@@ -371,16 +435,31 @@ public class ResourceActionController {
         outStream.close();
 	}
 	
+	@ResourceMapping(value="loadVideo")
+	@ResponseBody
+	public void loadVideo(ResourceRequest request, ResourceResponse response) throws Exception{
+		String imgFile = ParamUtil.getString(request, "imgFile"); //文件名  路径
+        String path= getValue(imgFile);//这里是存放图片的文件夹地址
+        int index = path.lastIndexOf("/");
+        String pathname = path.substring(0, index);
+        String filename = path.substring(index+1, path.length());
+        response.setContentType("video/*"); 
+        OutputStream outStream=PortalUtil.getHttpServletResponse(response).getOutputStream();
+        WebFTPUtil.downloadFile(hostname, port, username, password, pathname, filename, outStream);
+        outStream.close();
+        
+	}
 	
 	@ResourceMapping(value="delImage")
 	@ResponseBody
-	public void delImage(ResourceRequest request, ResourceResponse response) throws Exception{
+	public boolean delImage(ResourceRequest request, ResourceResponse response) throws Exception{
 		String imgFile = ParamUtil.getString(request, "imgFile"); //文件名  路径
 		String path= getValue(imgFile);//这里是存放图片的文件夹地址
 		int index = path.lastIndexOf("/");
         String pathname = path.substring(0, index);
         String filename = path.substring(index+1, path.length());
-		WebFTPUtil.deleteFile(hostname, port, username, password, pathname, filename);
+		boolean flag=WebFTPUtil.deleteFile(hostname, port, username, password, pathname, filename);
+		return flag;
 	}
 	
 	public String getValue(String filename){
@@ -390,4 +469,26 @@ public class ResourceActionController {
 			return "/"+filename;
 		}
 	}
+	
+	@ResourceMapping(value="showinfo")
+	@ResponseBody
+	public void publish(ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, SQLException, IOException {
+		PrintWriter pw = null;
+		JSONObject json = new JSONObject();
+		User user = PortalUtil.getUser(request);
+		pw = response.getWriter();
+		Connection conn = DataAccess.getConnection();
+		PreparedStatement ps;
+		String sql = "update p_info set status='1' where createId=?";
+		ps = conn.prepareStatement(sql);
+		ps.setLong(1, user.getUserId());
+		ps.execute();
+		conn.close();
+		ps.close();
+		
+		json.put("result", "0");
+		pw.println(json.toString());
+	}
+	
+	
 }
