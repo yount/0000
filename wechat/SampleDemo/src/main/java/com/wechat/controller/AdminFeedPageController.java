@@ -39,9 +39,7 @@ public class AdminFeedPageController {
 		String infoUUID = ParamUtil.getString(request, "infoUUID");
 		List<EventInfoBean> infos = InfoDao.getAdminInfos(" and p.uuid = '"+infoUUID + "' ");
 		/**infos.get(0).info.setMediaURL("k03219ac7dw");*/
-		boolean isTencentVid=infos.get(0).info.getMediaURL().indexOf('/')>=0?false:true;
 		model.addAttribute("infos", infos.get(0));
-		model.addAttribute("isTencentVid",isTencentVid);
 		List<InfoWithUserBean> infoWithUsers= InfoDao.getUsersAndInfoUsers(infoUUID,"");
 		model.addAttribute("infoWithUsers",infoWithUsers);
 		

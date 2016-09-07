@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
-
+<%@  taglib  uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <portlet:defineObjects />
 	<portlet:resourceURL id="changeUserInfoStatus" var="changeUserInfoStatusURL">
 </portlet:resourceURL>
@@ -240,24 +240,19 @@
 							 --%>
 						</tr>
 						
-						<c:forEach items="${infos.info.mediaURL.split(\";\")}" varStatus="i" var="mediaURL" >
-						<tr>
-							<td class="td-title">Videos
-							</td>
-							<td class="td-content" colspan="5" style="text-align: left;">
-								<c:choose> 
-									<c:when test="${!isTencentVid}">
+						<c:forEach items="${info.info.mediaURL.split(\";\")}" varStatus="i" var="mediaURL" >
+						<tr >
+							<td>
+								<c:if test="${fn:contains(mediaURL,'.')}">
 									<div id="video_${status.index}" style='display:inline-block;float:left; padding:0;width: 150px; margin-right:10px;'>
 									 	<div id='' style="z-index:2;float: right;margin:0;padding:0; height:0px;">
 										    <a class='btn-pic btn-pic-bg' style="top:10px;" href='javascript:void(0)'>
 										      <span id='' onclick="del_video('video_${status.index}','${mediaURL }');">deletevideo</span>
 										    </a>
 										 </div>
-									
-									
 										<video width="50%"  controls="controls" style="text-align: center">
-											<%-- <source src="${loadVideoURL}&imgFile=/videos/1472699351331.mp4" type="video/mp4"  webkit-playsinline /> --%>  
-											<%-- <source src="<%=basePath %>/media/video2.mp4" type="video/mp4"  webkit-playsinline /> --%>
+										  <%-- <source src="${loadVideoURL}&imgFile=/videos/1472699351331.mp4" type="video/mp4"  webkit-playsinline /> --%>  
+										  <%-- <source src="<%=basePath %>/media/video2.mp4" type="video/mp4"  webkit-playsinline /> --%>
 										  <source src="${loadVideoURL}&imgFile=${mediaURL}" type="video/mp4"  webkit-playsinline />
 										  <source src="${loadVideoURL}&imgFile=${mediaURL}" type="video/ogg"  webkit-playsinline />
 										  <source src="${loadVideoURL}&imgFile=${mediaURL}" type="video/webm"  webkit-playsinline />
@@ -265,14 +260,19 @@
 										  	<embed src="${loadVideoURL}&imgFile=${mediaURL}" width="100%" /> 
 										  </object>			
 										</video>
-									</c:when>
-									<c:when test="${isTencentVid}">
-										<p style="text-align: left"><iframe class="video_iframe" id="video1_iframe" style="z-index:1;" src="http://v.qq.com/iframe/player.html?vid=${mediaURL}&amp;width=400&amp;height=200&amp;auto=0"  width="400" height="200" scrolling="auto" allowfullscreen="false" frameborder="0" ></iframe></p> 
-									</c:when>
-								</c:choose>
+									</div>
+								</c:if>
+								<c:if test="${!empty mediaURL} && ${fn:length(mediaURL)>0} && ${fn:indexOf(mediaURL, 'und')<0}">
+									<p style="text-align: left">
+										<iframe class="video_iframe" id="video1_iframe" style="z-index:1;" src="http://v.qq.com/iframe/player.html?vid=${mediaURL}&amp;width=400&amp;height=200&amp;auto=0"  width="400" height="200" scrolling="auto" allowfullscreen="false" frameborder="0" >
+										</iframe>
+									</p> 
+								</c:if>
+								
+								
 							</td>
 						</tr>
-						</c:forEach>
+						</c:forEach >
 						<tr>
 						<td > <input value="" type="file" name="uploadify" id="uploadify" />
 						<input value="remove" type="button"  name="uploadify" id="uploadify" onclick="remove()" />
