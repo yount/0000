@@ -56,7 +56,7 @@ public class WebFTPUtil {
 			if (!FTPReply.isPositiveCompletion(replyCode)) {
 				return flag;
 			}
-			//ftpClient.enterLocalPassiveMode();
+			ftpClient.enterLocalPassiveMode();
 			//////////////////////////
 			// ftpClient.enterLocalPassiveMode();
 			///////////////////////////
@@ -118,7 +118,7 @@ public class WebFTPUtil {
 			if (!FTPReply.isPositiveCompletion(replyCode)) {
 				return flag;
 			}
-			//ftpClient.enterLocalPassiveMode();
+			ftpClient.enterLocalPassiveMode();
 			//////////////////////////////////
 			// ftpClient.enterLocalPassiveMode();
 			/////////////////////////////////
@@ -181,7 +181,7 @@ public class WebFTPUtil {
 			if (!FTPReply.isPositiveCompletion(replyCode)) {
 				return flag;
 			}
-			//ftpClient.enterLocalPassiveMode();
+			ftpClient.enterLocalPassiveMode();
 			///////////////////////////////////////
 			// ftpClient.enterLocalPassiveMode();
 			///////////////////////////////////////
